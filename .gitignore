@@ -135,8 +135,7 @@ blurred_docs/
 *.pdf
 !raw_pdfs/*.pdf
 
-# Model files (too large for git)
-*.pt
+# Model files (tracked with Git LFS)
 *.pth
 *.h5
 *.hdf5
