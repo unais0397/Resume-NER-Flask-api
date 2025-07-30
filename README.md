@@ -1,67 +1,47 @@
 # Resume NER Flask API
 
-A Flask-based REST API for extracting named entities from resume PDFs using a fine-tuned BERT model for Named Entity Recognition (NER).
+Flask REST API for extracting named entities from resume PDFs using fine-tuned BERT model.
 
 ## Features
 
-- **PDF Processing**: Extract text from PDF resumes with advanced cleaning and preprocessing
-- **Named Entity Recognition**: Extract entities like names, skills, companies, degrees, locations, etc.
-- **RESTful API**: Simple HTTP endpoints for easy integration
-- **CORS Support**: Cross-origin resource sharing enabled
-- **Error Handling**: Comprehensive error handling and logging
-- **File Validation**: Secure file upload with size and type validation
+- PDF text extraction and preprocessing
+- Named Entity Recognition (8 entity types)
+- File validation and error handling
 
 ## Extracted Entities
 
-The API extracts the following entity types from resumes:
 - **NAME**: Person's name
-- **EMAIL**: Email addresses
-- **SKILLS**: Technical skills and competencies
-- **COMPANY**: Company names and organizations
-- **DESIGNATION**: Job titles and positions
-- **DEGREE**: Educational degrees and qualifications
+- **EMAIL**: Email addresses  
+- **SKILLS**: Technical skills
+- **COMPANY**: Company names
+- **DESIGNATION**: Job titles
+- **DEGREE**: Educational degrees
 - **COLLEGE NAME**: Educational institutions
-- **LOCATION**: Geographic locations and addresses
+- **LOCATION**: Geographic locations
 
-## Installation
+## Quick Start
 
-1. Clone the repository:
 ```bash
-git clone <your-repo-url>
+# Clone and install
+git clone https://github.com/unais0397/Resume-NER-Flask-api.git
 cd NER_Flask_API
-```
-
-2. Install dependencies:
-```bash
 pip install -r requirements.txt
-```
 
-3. Download the pre-trained model:
-   - The model file `best_resume_ner_model.pt` should be placed in the root directory
-   - This is a large file (416MB) and may need to be downloaded separately
+# Add model file (416MB) to root directory
+# Download: best_resume_ner_model.pt
 
-## Usage
-
-### Starting the Server
-
-```bash
+# Run server
 python main.py
 ```
 
-The server will start on `http://localhost:8002` by default.
+Server runs on `http://localhost:8002`
 
-### API Endpoints
+## API Usage
 
-#### POST /minedata
+**Endpoint:** `POST /minedata`
 
-Extract named entities from a resume PDF.
+**Request:** PDF file via `multipart/form-data`
 
-**Request:**
-- Method: `POST`
-- Content-Type: `multipart/form-data`
-- Body: PDF file in the `file` field
-
-**Example using curl:**
 ```bash
 curl -X POST -F "file=@resume.pdf" http://localhost:8002/minedata
 ```
@@ -70,80 +50,49 @@ curl -X POST -F "file=@resume.pdf" http://localhost:8002/minedata
 ```json
 {
   "status": 200,
-  "message": "Success",
+  "message": "Success", 
   "entities": {
     "NAME": ["John Doe"],
-    "EMAIL": ["john.doe@email.com"],
-    "SKILLS": ["Python", "Machine Learning", "Flask"],
-    "COMPANY": ["Tech Corp", "Startup Inc"],
-    "DESIGNATION": ["Software Engineer", "Data Scientist"],
-    "DEGREE": ["Bachelor of Science", "Master of Computer Science"],
-    "COLLEGE NAME": ["University of Technology"],
-    "LOCATION": ["San Francisco, CA"]
+    "EMAIL": ["john@email.com"],
+    "SKILLS": ["Python", "ML"],
+    "COMPANY": ["Tech Corp"],
+    "DESIGNATION": ["Engineer"],
+    "DEGREE": ["BS Computer Science"],
+    "COLLEGE NAME": ["University"],
+    "LOCATION": ["San Francisco"]
   }
 }
 ```
 
-**Error Responses:**
-
-- `400 Bad Request`: No file provided or invalid file
-- `415 Unsupported Media Type`: Non-PDF file uploaded
-- `422 Unprocessable Content`: PDF is empty or contains insufficient text
-- `500 Internal Server Error`: Server processing error
-
 ## Configuration
 
-Edit `config.py` to customize:
-- Port number (default: 8002)
-- Debug mode (default: True)
-- File size limits (default: 5MB)
-- Folder paths for file storage
+Edit `config.py` for:
+- Port (default: 8002)
+- Debug mode
+- File size limits
+- Storage paths
 
 ## Project Structure
 
 ```
-NER_Flask_API/
-├── main.py                 # Flask application entry point
-├── ner_model.py           # NER model implementation
-├── minegold.py            # PDF processing utilities
-├── config.py              # Configuration settings
-├── requirements.txt       # Python dependencies
-├── best_resume_ner_model.pt  # Pre-trained BERT model
-├── raw_pdfs/             # Directory for uploaded PDFs
-└── README.md             # This file
+├── main.py                 # Flask app
+├── ner_model.py           # NER model
+├── minegold.py            # PDF processing
+├── config.py              # Configuration
+├── requirements.txt       # Dependencies
+├── best_resume_ner_model.pt  # Model file
+└── raw_pdfs/             # Upload directory
 ```
 
-## Model Details
+## Model
 
-The API uses a fine-tuned BERT model (`bert-base-uncased`) trained specifically for resume entity extraction. The model:
-
-- Supports 8 entity types
-- Uses BIO tagging scheme (Begin-Inside-Outside)
-- Maximum sequence length: 256 tokens
-- Runs on CPU or GPU (CUDA if available)
-
-## Development
-
-### Training the Model
-
-The model was trained using the notebook `Model Creation.ipynb` which contains:
-- Data preprocessing
-- Model training pipeline
-- Evaluation metrics
-- Model saving
-
-### Adding New Entity Types
-
-To add new entity types:
-1. Update the `unique_labels` list in `ner_model.py`
-2. Retrain the model with the new labels
-3. Update the API documentation
+- BERT-based NER model
+- 8 entity types with BIO tagging
+- 256 token sequence length
+- CPU/GPU compatible
 
 ## Dependencies
 
-- **Flask**: Web framework
-- **PyTorch**: Deep learning framework
-- **Transformers**: BERT model implementation
-- **pdfminer.six**: PDF text extraction
+- Flask, PyTorch, Transformers, pdfminer.six
 
 
