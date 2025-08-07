@@ -25,6 +25,8 @@ Flask REST API for extracting named entities from resume PDFs using fine-tuned B
 # Clone and install
 git clone https://github.com/unais0397/Resume-NER-Flask-api.git
 cd Resume-NER-Flask-api
+python -m venv venv
+source venv/bin/activate    # Or venv\Scripts\activate on Windows
 pip install -r requirements.txt
 
 # Add model file (416MB) to root directory
